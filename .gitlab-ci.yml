@@ -4,6 +4,8 @@ variables:
   MIX_TARGET: rpi4
 
 before_script:
+  - mkdir ~/.ssh
+  - echo "$NERVES_SSH_KEY" > ~/.ssh/id_rsa.pub
   - mix local.rebar --force
   - mix local.hex --force
   - mix deps.get
