@@ -8,6 +8,7 @@ before_script:
   - echo "$NERVES_SSH_KEY" > ~/.ssh/id_rsa.pub
   - mix local.rebar --force
   - mix local.hex --force
+  - mix archive.install hex nerves_bootstrap
   - mix deps.get
 
 mix:
