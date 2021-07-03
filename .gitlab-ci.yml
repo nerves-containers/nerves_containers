@@ -4,7 +4,7 @@ variables:
   MIX_TARGET: rpi4
 
 before_script:
-  - apk add --update --no-cache openssh git
+  - apk add --update --no-cache openssh git make g++ squashfs-tools curl ncurses-libs
   - mkdir ~/.ssh
   - eval "$(ssh-agent)"
   - echo "$NERVES_SSH_KEY" > ~/.ssh/id_rsa.pub
