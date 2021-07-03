@@ -4,7 +4,9 @@ variables:
   MIX_TARGET: rpi4
 
 before_script:
-  - apk add --update --no-cache openssh git make g++ squashfs-tools curl ncurses-libs cmake openssl-dev bc m4 unzip python2
+  - apk add --update --no-cache openssh git make g++ squashfs-tools \
+    curl ncurses-libs cmake openssl-dev \
+    bc m4 xz unzip python2
   - mkdir ~/.ssh
   - eval "$(ssh-agent)"
   - echo "$NERVES_SSH_KEY" > ~/.ssh/id_rsa.pub
