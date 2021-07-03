@@ -1,3 +1,10 @@
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_VERIFY: 1
+  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_CERT_PATH: "/certs/client"
+
 stages:
   - prepare
   - build
@@ -31,6 +38,8 @@ variables:
 build:
   image: $CI_REGISTRY_IMAGE/buildimage:$CI_COMMIT_REF_NAME
   stage: build
+  variables:
+    MIX_TARGET: containers_rpi4
   script:
     - mkdir -p ~/.ssh
     - eval "$(ssh-agent)"
