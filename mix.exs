@@ -47,7 +47,7 @@ defmodule NervesPodman.MixProject do
       {:nerves_system_rpi3, "~> 1.13", runtime: false, targets: :rpi3},
       {:nerves_system_rpi3a, "~> 1.13", runtime: false, targets: :rpi3a},
       {:nerves_system_rpi4, "~> 1.16", runtime: false, targets: :rpi4},
-      {:nerves_containers_rpi4, git: "git@github.com:nerves-containers/nerves_containers_rpi4.git", runtime: false, targets: :containers_rpi4, nerves: [compile: true]},
+      {:nerves_containers_rpi4, git: "git@github.com:nerves-containers/nerves_containers_rpi4.git", tag: "development", runtime: false, targets: :containers_rpi4, nerves: [compile: true]},
       {:nerves_system_bbb, "~> 2.8", runtime: false, targets: :bbb},
       {:nerves_system_osd32mp1, "~> 0.4", runtime: false, targets: :osd32mp1},
       {:nerves_system_x86_64, "~> 1.13", runtime: false, targets: :x86_64}
