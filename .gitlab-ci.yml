@@ -1,7 +1,7 @@
 image: hexpm/elixir:1.12.1-erlang-24.0.3-alpine-3.13.3
 
 variables:
-  MIX_TARGET: rpi4
+  MIX_TARGET: containers_rpi4
 
 before_script:
   - apk add --update --no-cache openssh git make g++ bash
