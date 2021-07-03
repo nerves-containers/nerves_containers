@@ -4,10 +4,11 @@ variables:
   MIX_TARGET: containers_rpi4
 
 before_script:
-  - apk add --update --no-cache openssh git make g++ bash
+  - apk add --update --no-cache openssh git
+    make gcc g++ bash which sed binutils gzip bzip2 perl tar cpio rsync file
     squashfs-tools fwup
     curl ncurses-libs cmake openssl-dev
-    bc m4 xz unzip python2
+    bc m4 xz unzip patch python2
   - mkdir ~/.ssh
   - eval "$(ssh-agent)"
   - echo "$NERVES_SSH_KEY" > ~/.ssh/id_rsa.pub
