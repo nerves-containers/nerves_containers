@@ -1,31 +1,50 @@
-image: hexpm/elixir:1.12.1-erlang-24.0.3-alpine-3.13.3
+stages:
+  - prepare
+  - build
+
+##########################################
+# The meta jobs are used to build the images that are actually used in the later stages
+##########################################
+
+meta-build-image:
+  image: docker:stable
+  services:
+    - docker:dind
+  stage: prepare
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - cd .meta
+    - docker build --build-arg CI_REGISTRY=$CI_REGISTRY --build-arg IMAGE_TAG=$CI_COMMIT_REF_NAME -t $CI_REGISTRY_IMAGE/buildimage:$CI_COMMIT_REF_NAME .
+    - docker push $CI_REGISTRY_IMAGE/buildimage:$CI_COMMIT_REF_NAME
+  only:
+    refs:
+      - master
+      - stage
+    changes:
+      - .meta/Dockerfile
+
+#####################
 
 variables:
   MIX_TARGET: containers_rpi4
 
-before_script:
-  - apk add --update --no-cache openssh git
-    make gcc g++ bash which sed binutils gzip bzip2 perl tar cpio rsync file
-    squashfs-tools fwup
-    curl ncurses-libs cmake openssl-dev
-    bc m4 xz unzip patch python2
-  - mkdir ~/.ssh
-  - eval "$(ssh-agent)"
-  - echo "$NERVES_SSH_KEY" > ~/.ssh/id_rsa.pub
-  - echo "$NERVES_GITHUB_KEY" > ~/.ssh/github.key
-  - chmod 600 ~/.ssh/github.key
-  - ssh-add ~/.ssh/github.key
-  - ssh-add -l
-  - ssh-keyscan github.com >> ~/.ssh/known_hosts
-  - mix local.rebar --force
-  - mix local.hex --force
-  - mix archive.install --force hex nerves_bootstrap
-  - mix deps.get
-
-mix:
+build:
+  image: $CI_REGISTRY_IMAGE/buildimage:$CI_COMMIT_REF_NAME
+  stage: build
   script:
+    - mkdir -p ~/.ssh
+    - eval "$(ssh-agent)"
+    - echo "$NERVES_SSH_KEY" > ~/.ssh/id_rsa.pub
+    - echo "$NERVES_GITHUB_KEY" > ~/.ssh/github.key
+    - chmod 600 ~/.ssh/github.key
+    - ssh-add ~/.ssh/github.key
+    - ssh-add -l
+    - ssh-keyscan github.com >> ~/.ssh/known_hosts
+    - mix local.rebar --force
+    - mix local.hex --force
+    - mix archive.install --force hex nerves_bootstrap
+    - mix deps.get
     - mix firmware --verbosity=quiet
   artifacts:
     paths:
       - _build/
-
