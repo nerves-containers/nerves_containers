@@ -32,27 +32,13 @@ meta-build-image:
 
 #####################
 
-variables:
-  MIX_TARGET: containers_rpi4
-
-build:
+build_rpi4:
   image: $CI_REGISTRY_IMAGE/buildimage:$CI_COMMIT_REF_NAME
   stage: build
   variables:
-    MIX_TARGET: containers_rpi4
+    MIX_TARGET: rpi4
   script:
-    - mkdir -p ~/.ssh
-    - eval "$(ssh-agent)"
-    - echo "$NERVES_SSH_KEY" > ~/.ssh/id_rsa.pub
-    - echo "$NERVES_GITHUB_KEY" > ~/.ssh/github.key
-    - chmod 600 ~/.ssh/github.key
-    - ssh-add ~/.ssh/github.key
-    - ssh-add -l
-    - ssh-keyscan github.com >> ~/.ssh/known_hosts
-    - mix local.rebar --force
-    - mix local.hex --force
-    - mix archive.install --force hex nerves_bootstrap
-    - mix deps.get
+    - bash _init_ci.sh
     - mix firmware --verbosity=quiet
   artifacts:
     paths:
@@ -60,4 +46,33 @@ build:
   only:
     refs:
       - main
-      - stage
+
+build_x86_64:
+  image: $CI_REGISTRY_IMAGE/buildimage:$CI_COMMIT_REF_NAME
+  stage: build
+  variables:
+    MIX_TARGET: x86_64
+  script:
+    - bash _init_ci.sh
+    - mix firmware --verbosity=quiet
+  artifacts:
+    paths:
+      - _build/
+  only:
+    refs:
+      - main
+
+build_rpi:
+  image: $CI_REGISTRY_IMAGE/buildimage:$CI_COMMIT_REF_NAME
+  stage: build
+  variables:
+    MIX_TARGET: rpi
+  script:
+    - bash _init_ci.sh
+    - mix firmware --verbosity=quiet
+  artifacts:
+    paths:
+      - _build/
+  only:
+    refs:
+      - main
