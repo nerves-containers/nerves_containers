@@ -51,7 +51,7 @@ defmodule NervesPodman.MixProject do
       {:nerves_pack, "~> 0.4.0", targets: @all_targets},
 
       # Dependencies for specific targets
-      {:nerves_system_rpi,
+      {:nerves_containers_rpi,
        git: "git@github.com:nerves-containers/nerves_containers_rpi.git",
        tag: "development",
        runtime: false,
@@ -63,7 +63,7 @@ defmodule NervesPodman.MixProject do
        runtime: false,
        targets: :rpi4,
        nerves: [compile: true]},
-      {:nerves_system_x86_64,
+      {:nerves_containers_x86_64,
        git: "git@github.com:nerves-containers/nerves_containers_x86_64.git",
        tag: "development",
        runtime: false,
