@@ -1,5 +1,5 @@
 # https://github.com/nerves-project/nerves_system_br/blob/main/support/docker/nerves_system_br/Dockerfile
-FROM hexpm/erlang:24.0.3-ubuntu-focal-20210325
+FROM hexpm/elixir:24.0.3-ubuntu-focal-20210325
 LABEL maintainer="Nerves Project developers <nerves@nerves-project.org>" \
       vendor="NervesProject" \
 description="Container with everything needed to build Nerves Systems"
