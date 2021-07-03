@@ -18,7 +18,7 @@ meta-build-image:
     - docker push $CI_REGISTRY_IMAGE/buildimage:$CI_COMMIT_REF_NAME
   only:
     refs:
-      - master
+      - main
       - stage
     changes:
       - .meta/Dockerfile
@@ -48,3 +48,7 @@ build:
   artifacts:
     paths:
       - _build/
+  only:
+    refs:
+      - main
+      - stage
