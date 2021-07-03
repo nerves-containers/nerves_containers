@@ -43,6 +43,10 @@ build_rpi4:
   artifacts:
     paths:
       - _build/
+  cache:
+    key: build-cache-$CI_COMMIT_REF_SLUG
+    paths:
+      - _build/
   only:
     refs:
       - main
@@ -58,6 +62,10 @@ build_x86_64:
   artifacts:
     paths:
       - _build/
+  cache:
+    key: build-cache-$CI_COMMIT_REF_SLUG
+    paths:
+      - _build/
   only:
     refs:
       - main
@@ -71,6 +79,10 @@ build_rpi:
     - bash _init_ci.sh
     - mix firmware --verbosity=quiet
   artifacts:
+    paths:
+      - _build/
+  cache:
+    key: build-cache-$CI_COMMIT_REF_SLUG
     paths:
       - _build/
   only:
