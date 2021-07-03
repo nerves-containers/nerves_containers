@@ -4,7 +4,7 @@ variables:
   MIX_TARGET: rpi4
 
 before_script:
-  - apk add --update --no-cache openssh git make g++
+  - apk add --update --no-cache openssh git make g++ bash
     squashfs-tools fwup
     curl ncurses-libs cmake openssl-dev
     bc m4 xz unzip python2
@@ -23,7 +23,7 @@ before_script:
 
 mix:
   script:
-    - mix firmware
+    - mix firmware --verbosity=quiet
   artifacts:
     paths:
       - _build/
