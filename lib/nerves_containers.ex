@@ -1,6 +1,6 @@
-defmodule NervesPodman do
+defmodule NervesContainers do
   @moduledoc """
-  Documentation for NervesPodman.
+  Documentation for NervesContainers.
   """
 
   @doc """
@@ -8,7 +8,7 @@ defmodule NervesPodman do
 
   ## Examples
 
-      iex> NervesPodman.hello
+      iex> NervesContainers.hello
       :world
 
   """

@@ -1,7 +1,7 @@
-defmodule NervesPodman.MixProject do
+defmodule NervesContainers.MixProject do
   use Mix.Project
 
-  @app :nerves_podman
+  @app :nerves_containers
   @version "0.1.0"
   @all_targets [
     :rpi,
@@ -32,7 +32,7 @@ defmodule NervesPodman.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      mod: {NervesPodman.Application, []},
+      mod: {NervesContainers.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

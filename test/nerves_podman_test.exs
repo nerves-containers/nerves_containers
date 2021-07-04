@@ -1,8 +1,8 @@
-defmodule NervesPodmanTest do
+defmodule NervesContainersTest do
   use ExUnit.Case
-  doctest NervesPodman
+  doctest NervesContainers
 
   test "greets the world" do
-    assert NervesPodman.hello() == :world
+    assert NervesContainers.hello() == :world
   end
 end
