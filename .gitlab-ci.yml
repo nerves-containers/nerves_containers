@@ -9,31 +9,10 @@ stages:
   - prepare
   - build
 
-##########################################
-# The meta jobs are used to build the images that are actually used in the later stages
-##########################################
-
-meta-build-image:
-  image: docker:stable
-  services:
-    - docker:dind
-  stage: prepare
-  script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - cd .meta
-    - docker build --build-arg CI_REGISTRY=$CI_REGISTRY --build-arg IMAGE_TAG=$CI_COMMIT_REF_NAME -t $CI_REGISTRY_IMAGE/buildimage:$CI_COMMIT_REF_NAME .
-    - docker push $CI_REGISTRY_IMAGE/buildimage:$CI_COMMIT_REF_NAME
-  only:
-    refs:
-      - main
-      - stage
-    changes:
-      - .meta/Dockerfile
-
 #####################
 
 build_rpi4:
-  image: $CI_REGISTRY_IMAGE/buildimage:$CI_COMMIT_REF_NAME
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
   stage: build
   variables:
     MIX_TARGET: rpi4
@@ -50,9 +29,10 @@ build_rpi4:
   only:
     refs:
       - main
+      - development
 
 build_x86_64:
-  image: $CI_REGISTRY_IMAGE/buildimage:$CI_COMMIT_REF_NAME
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
   stage: build
   variables:
     MIX_TARGET: x86_64
@@ -69,9 +49,10 @@ build_x86_64:
   only:
     refs:
       - main
+      - development
 
 build_rpi:
-  image: $CI_REGISTRY_IMAGE/buildimage:$CI_COMMIT_REF_NAME
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
   stage: build
   variables:
     MIX_TARGET: rpi
@@ -88,3 +69,4 @@ build_rpi:
   only:
     refs:
       - main
+      - development

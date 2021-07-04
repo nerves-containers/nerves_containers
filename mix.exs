@@ -5,13 +5,13 @@ defmodule NervesContainers.MixProject do
   @version "0.1.0"
   @all_targets [
     :rpi,
-    #:rpi0,
-    #:rpi2,
-    #:rpi3,
-    #:rpi3a,
+    # :rpi0,
+    # :rpi2,
+    # :rpi3,
+    # :rpi3a,
     :rpi4,
-    #:bbb,
-    #:osd32mp1,
+    # :bbb,
+    # :osd32mp1,
     :x86_64
   ]
 
@@ -45,6 +45,7 @@ defmodule NervesContainers.MixProject do
       {:shoehorn, "~> 0.7.0"},
       {:ring_logger, "~> 0.8.1"},
       {:toolshed, "~> 0.2.13"},
+      {:muontrap, "~> 0.6.0"},
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.11.3", targets: @all_targets},
@@ -55,20 +56,17 @@ defmodule NervesContainers.MixProject do
        git: "git@github.com:nerves-containers/nerves_containers_rpi.git",
        tag: "development",
        runtime: false,
-       targets: :rpi,
-       nerves: [compile: true]},
+       targets: :rpi},
       {:nerves_containers_rpi4,
        git: "git@github.com:nerves-containers/nerves_containers_rpi4.git",
        tag: "development",
        runtime: false,
-       targets: :rpi4,
-       nerves: [compile: true]},
+       targets: :rpi4},
       {:nerves_containers_x86_64,
        git: "git@github.com:nerves-containers/nerves_containers_x86_64.git",
        tag: "development",
        runtime: false,
-       targets: :x86_64,
-       nerves: [compile: true]}
+       targets: :x86_64}
     ]
   end
 

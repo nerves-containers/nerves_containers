@@ -10,6 +10,10 @@ defmodule NervesContainers.Application do
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: NervesContainers.Supervisor]
 
+    if target() != :host do
+      MuonTrap.cmd("cgroupfs-mount", [])
+    end
+
     children =
       [
         # Children for all targets
@@ -34,6 +38,7 @@ defmodule NervesContainers.Application do
       # Children for all targets except host
       # Starts a worker by calling: NervesContainers.Worker.start_link(arg)
       # {NervesContainers.Worker, arg},
+      {MuonTrap.Daemon, ["balena-engine-daemon", ["--data-root", "/data/balena"], []]}
     ]
   end
 
