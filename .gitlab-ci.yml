@@ -42,7 +42,7 @@ build_rpi4:
     - mix firmware --verbosity=quiet
   artifacts:
     paths:
-      - _build/
+      - _build/rpi4_*/nerves/images/*.fw
   cache:
     key: build-cache-$CI_COMMIT_REF_SLUG
     paths:
@@ -61,7 +61,7 @@ build_x86_64:
     - mix firmware --verbosity=quiet
   artifacts:
     paths:
-      - _build/
+      - _build/x86_64_*/nerves/images/*.fw
   cache:
     key: build-cache-$CI_COMMIT_REF_SLUG
     paths:
@@ -80,7 +80,7 @@ build_rpi:
     - mix firmware --verbosity=quiet
   artifacts:
     paths:
-      - _build/
+      - _build/rpi_*/nerves/images/*.fw
   cache:
     key: build-cache-$CI_COMMIT_REF_SLUG
     paths:
