@@ -12,7 +12,8 @@ defmodule NervesContainers.MixProject do
     :rpi4,
     # :bbb,
     # :osd32mp1,
-    :x86_64
+    :x86_64,
+    :x86_64_efi
   ]
 
   def project do
@@ -46,6 +47,7 @@ defmodule NervesContainers.MixProject do
       {:ring_logger, "~> 0.8.1"},
       {:toolshed, "~> 0.2.13"},
       {:muontrap, "~> 0.6.0"},
+      {:jason, "~> 1.2"},
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.11.3", targets: @all_targets},
@@ -66,7 +68,12 @@ defmodule NervesContainers.MixProject do
        git: "git@github.com:nerves-containers/nerves_containers_x86_64.git",
        tag: "development",
        runtime: false,
-       targets: :x86_64}
+       targets: :x86_64},
+      {:nerves_containers_x86_64_uefi,
+       git: "git@github.com:nerves-containers/nerves_containers_x86_64.git",
+       tag: "development-uefi",
+       runtime: false,
+       targets: :x86_64_efi}
     ]
   end
 

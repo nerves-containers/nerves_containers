@@ -51,6 +51,26 @@ build_x86_64:
       - main
       - development
 
+build_x86_64_uefi:
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
+  stage: build
+  variables:
+    MIX_TARGET: x86_64_efi
+  script:
+    - bash _init_ci.sh
+    - mix firmware --verbosity=quiet
+  artifacts:
+    paths:
+      - _build/x86_64_efi_*/nerves/images/*.fw
+  cache:
+    key: build-cache-$CI_COMMIT_REF_SLUG
+    paths:
+      - _build/
+  only:
+    refs:
+      - main
+      - development
+
 build_rpi:
   image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
   stage: build
