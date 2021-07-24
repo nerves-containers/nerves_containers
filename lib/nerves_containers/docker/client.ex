@@ -11,11 +11,13 @@ defmodule NervesContainers.Docker.Client do
   # To post data you need to add a Content-Type and a Content-Length header to the
   # request and then send the data to the socket
   def request(method, path, target \\ {:local, "/var/run/docker.sock"}) do
-    {:ok, socket} = :gen_tcp.connect(target, 0, [
-      :binary,
-      {:active, false},
-      {:packet, :http_bin}
-    ])
+    {:ok, socket} =
+      :gen_tcp.connect(target, 0, [
+        :binary,
+        {:active, false},
+        {:packet, :http_bin}
+      ])
+
     :gen_tcp.send(socket, "#{method} #{path} HTTP/1.1\r\nHost: #{:net_adm.localhost()}\r\n\r\n")
     do_recv(socket)
   end
@@ -40,24 +42,32 @@ defmodule NervesContainers.Docker.Client do
     :gen_tcp.send(socket, data)
   end
 
-  def do_recv(socket), do: do_recv(socket, :gen_tcp.recv(socket, 0 , 5000), %D{})
+  def do_recv(socket), do: do_recv(socket, :gen_tcp.recv(socket, 0, 5000), %D{})
 
-  def do_recv(socket, {:ok, {:http_response, {1,1}, code, _}}, resp) do
+  def do_recv(socket, {:ok, {:http_response, {1, 1}, code, _}}, resp) do
     do_recv(socket, :gen_tcp.recv(socket, 0, 5000), %D{resp | status: code})
   end
+
   def do_recv(socket, {:ok, {:http_header, _, h, _, v}}, resp) do
     do_recv(socket, :gen_tcp.recv(socket, 0, 5000), %D{resp | headers: [{h, v} | resp.headers]})
   end
+
   def do_recv(socket, {:ok, :http_eoh}, resp) do
-    IO.inspect(resp, label: "resp before body")
-      # Now we only have body left.
-      # # Depending on headers here you may want to do different things.
-      # # The response might be chunked, or upgraded in case you have attached to the container
-      # # Now I can receive the response. Because of `:active, false} I need to explicitly ask for data, otherwise it gets send to the process as messages.
+    # Now we only have body left.
+    # Depending on headers here you may want to do different things.
+    # The response might be chunked, or upgraded in case you have attached to the container
+    # Now I can receive the response. Because of `{:active, false}` I need to explicitly ask for data,
+    # otherwise it gets send to the process as messages.
     case :proplists.get_value(:"Content-Type", resp.headers) do
-      "application/vnd.docker.raw-stream" -> {:stream, resp, socket} # Return the socket for bi-directional communication
-      "application/json" -> with {:ok, data} <- read_body(socket, resp), do: {:ok, resp, Jason.decode!(data)}
-      _ -> {:ok, resp, read_body(socket, resp)}
+      # Return the socket for bi-directional communication
+      "application/vnd.docker.raw-stream" ->
+        {:stream, resp, socket}
+
+      "application/json" ->
+        with {:ok, data} <- read_body(socket, resp), do: {:ok, resp, Jason.decode!(data)}
+
+      _ ->
+        {:ok, resp, read_body(socket, resp)}
     end
   end
 
@@ -67,17 +77,15 @@ defmodule NervesContainers.Docker.Client do
         # No content length. Checked if chunked
         case :proplists.get_value(:"Transfer-Encoding", resp.headers) do
           "chunked" -> read_chunked_body(socket, resp)
-          _ -> "" # No body
+          # No body
+          _ -> ""
         end
+
       content_length ->
         bytes_to_read = String.to_integer(content_length)
-        :inet.setopts(socket, [{:packet, :raw}]) # No longer line based http, just read data
-        case :gen_tcp.recv(socket, bytes_to_read, 5000) do
-          {:ok, data} ->
-            data
-          {:error, reason} ->
-            {:error, reason}
-        end
+        # No longer line based http, just read data
+        :inet.setopts(socket, [{:packet, :raw}])
+        :gen_tcp.recv(socket, bytes_to_read, 5000)
     end
   end
 
