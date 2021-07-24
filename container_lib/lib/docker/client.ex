@@ -4,21 +4,62 @@ defmodule ContainerLib.Docker.Client do
 
   alias ContainerLib.Docker.Client, as: D
 
+  @version Mix.Project.config()[:version]
+
   # Send requests to the docker daemon.
   # request("GET", "/containers/json")
   # request("POST", "/containers/abc/attach?stream=1&stdin=1&stdout=1")
   #
   # To post data you need to add a Content-Type and a Content-Length header to the
   # request and then send the data to the socket
-  def request(method, path, target \\ {:local, "/var/run/docker.sock"}) do
+  def request(method, path, data \\ "", target \\ {:local, "/var/run/docker.sock"}) do
     {:ok, socket} =
-      :gen_tcp.connect(target, 0, [
-        :binary,
-        {:active, false},
-        {:packet, :http_bin}
-      ])
+      case target do
+        {:local, _unix_sock} ->
+          :gen_tcp.connect(target, 0, [
+            :binary,
+            {:active, false},
+            {:packet, :http_bin}
+          ])
 
-    :gen_tcp.send(socket, "#{method} #{path} HTTP/1.1\r\nHost: #{:net_adm.localhost()}\r\n\r\n")
+        {host, port} ->
+          :gen_tcp.connect(host, port, [
+            :binary,
+            {:active, false},
+            {:packet, :http_bin}
+          ])
+      end
+
+    case data do
+      %{} ->
+        body = Jason.encode!(data)
+
+        :gen_tcp.send(
+          socket,
+          """
+          #{method} #{path} HTTP/1.1\r
+          Host: #{:net_adm.localhost()}\r
+          User-Agent: elixir_container_lib/#{@version}\r
+          Content-Length: #{byte_size(body)}\r
+          Content-Type: application/json\r
+          \r
+          #{body}
+          """
+        )
+
+      "" ->
+        :gen_tcp.send(
+          socket,
+          """
+          #{method} #{path} HTTP/1.1\r
+          Host: #{:net_adm.localhost()}\r
+          User-Agent: elixir_container_lib/#{@version}\r
+          \r
+          #{data}
+          """
+        )
+    end
+
     do_recv(socket)
   end
 

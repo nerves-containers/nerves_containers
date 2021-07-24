@@ -17,13 +17,14 @@ defmodule ContainerLib.Docker do
       |> URI.encode_query(:rfc3986)
 
     ignore_version = Keyword.get(opts, :no_version, false)
+    body = Keyword.get(opts, :body, "")
 
     cond do
       String.starts_with?(path, "/v1.") or ignore_version ->
-        Client.request(method, "#{path}?#{query}", socket())
+        Client.request(method, "#{path}?#{query}", body, socket())
 
       true ->
-        Client.request(method, "/#{api_version()}#{path}?#{query}", socket())
+        Client.request(method, "/#{api_version()}#{path}?#{query}", body, socket())
     end
   end
 
