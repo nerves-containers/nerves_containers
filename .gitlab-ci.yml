@@ -16,8 +16,10 @@ build_rpi4:
   stage: build
   variables:
     MIX_TARGET: rpi4
+  before_script:
+    - cd nerves_containers/
+    - bash ../_init_ci.sh
   script:
-    - bash _init_ci.sh
     - mix firmware --verbosity=quiet
   artifacts:
     paths:
@@ -36,8 +38,10 @@ build_x86_64:
   stage: build
   variables:
     MIX_TARGET: x86_64
+  before_script:
+    - cd nerves_containers/
+    - bash ../_init_ci.sh
   script:
-    - bash _init_ci.sh
     - mix firmware --verbosity=quiet
   artifacts:
     paths:
@@ -56,8 +60,10 @@ build_x86_64_uefi:
   stage: build
   variables:
     MIX_TARGET: x86_64_efi
+  before_script:
+    - cd nerves_containers/
+    - bash ../_init_ci.sh
   script:
-    - bash _init_ci.sh
     - mix firmware --verbosity=quiet
   artifacts:
     paths:
@@ -76,8 +82,10 @@ build_rpi:
   stage: build
   variables:
     MIX_TARGET: rpi
+  before_script:
+    - cd nerves_containers/
+    - bash ../_init_ci.sh
   script:
-    - bash _init_ci.sh
     - mix firmware --verbosity=quiet
   artifacts:
     paths:

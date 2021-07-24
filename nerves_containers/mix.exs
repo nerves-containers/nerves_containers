@@ -46,8 +46,7 @@ defmodule NervesContainers.MixProject do
       {:shoehorn, "~> 0.7.0"},
       {:ring_logger, "~> 0.8.1"},
       {:toolshed, "~> 0.2.13"},
-      {:muontrap, "~> 0.6.0"},
-      {:jason, "~> 1.2"},
+      {:container_manager, path: "../container_manager"},
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.11.3", targets: @all_targets},

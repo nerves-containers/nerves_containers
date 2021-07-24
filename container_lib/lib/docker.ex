@@ -1,14 +1,14 @@
-defmodule NervesContainers.Docker do
+defmodule ContainerLib.Docker do
   @moduledoc """
   Functions for interacting with a Docker Daemon using the [Docker Engine API](https://docs.docker.com/engine/api/).
   """
 
-  alias NervesContainers.Docker.Client
+  alias ContainerLib.Docker.Client
 
   def api_version(), do: "v1.40"
 
   def socket() do
-    Application.get_env(:nerves_containers, :docker_socket, {:local, "/var/run/docker.sock"})
+    Process.get(:docker_socket, {:local, "/var/run/docker.sock"})
   end
 
   def request(method, path, opts \\ []) do

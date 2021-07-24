@@ -1,8 +1,8 @@
-defmodule NervesContainers.Docker.Client do
+defmodule ContainerLib.Docker.Client do
   # https://elixirforum.com/t/how-to-send-a-http-request-through-an-unix-socket/35776/6
   defstruct status: 0, headers: [], body: ""
 
-  alias NervesContainers.Docker.Client, as: D
+  alias ContainerLib.Docker.Client, as: D
 
   # Send requests to the docker daemon.
   # request("GET", "/containers/json")
@@ -42,17 +42,17 @@ defmodule NervesContainers.Docker.Client do
     :gen_tcp.send(socket, data)
   end
 
-  def do_recv(socket), do: do_recv(socket, :gen_tcp.recv(socket, 0, 5000), %D{})
+  defp do_recv(socket), do: do_recv(socket, :gen_tcp.recv(socket, 0, 5000), %D{})
 
-  def do_recv(socket, {:ok, {:http_response, {1, 1}, code, _}}, resp) do
+  defp do_recv(socket, {:ok, {:http_response, {1, 1}, code, _}}, resp) do
     do_recv(socket, :gen_tcp.recv(socket, 0, 5000), %D{resp | status: code})
   end
 
-  def do_recv(socket, {:ok, {:http_header, _, h, _, v}}, resp) do
+  defp do_recv(socket, {:ok, {:http_header, _, h, _, v}}, resp) do
     do_recv(socket, :gen_tcp.recv(socket, 0, 5000), %D{resp | headers: [{h, v} | resp.headers]})
   end
 
-  def do_recv(socket, {:ok, :http_eoh}, resp) do
+  defp do_recv(socket, {:ok, :http_eoh}, resp) do
     # Now we only have body left.
     # Depending on headers here you may want to do different things.
     # The response might be chunked, or upgraded in case you have attached to the container
@@ -71,7 +71,7 @@ defmodule NervesContainers.Docker.Client do
     end
   end
 
-  def read_body(socket, resp) do
+  defp read_body(socket, resp) do
     case :proplists.get_value(:"Content-Length", resp.headers) do
       :undefined ->
         # No content length. Checked if chunked
@@ -89,9 +89,9 @@ defmodule NervesContainers.Docker.Client do
     end
   end
 
-  def read_chunked_body(socket, resp), do: read_chunked_body(socket, resp, [])
+  defp read_chunked_body(socket, resp), do: read_chunked_body(socket, resp, [])
 
-  def read_chunked_body(socket, resp, acc) do
+  defp read_chunked_body(socket, resp, acc) do
     :inet.setopts(socket, [{:packet, :line}])
 
     case :gen_tcp.recv(socket, 0, 5000) do

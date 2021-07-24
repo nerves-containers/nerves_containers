@@ -1,9 +1,9 @@
-defmodule NervesContainers.Docker.Containers do
+defmodule ContainerLib.Docker.Containers do
   @moduledoc """
   Functions for managing containers.
   """
 
-  import NervesContainers.Docker, only: [request: 3]
+  import ContainerLib.Docker, only: [request: 3]
 
   def list(opts \\ []) do
     request("GET", "/containers/json", query: opts)
