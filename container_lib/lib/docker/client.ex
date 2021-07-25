@@ -1,18 +1,42 @@
 defmodule ContainerLib.Docker.Client do
+  require Logger
+
   # https://elixirforum.com/t/how-to-send-a-http-request-through-an-unix-socket/35776/6
-  defstruct status: 0, headers: [], body: ""
+  defstruct status: 0, headers: [], body: "", stream: false
 
   alias ContainerLib.Docker.Client, as: D
 
   @version Mix.Project.config()[:version]
 
-  # Send requests to the docker daemon.
-  # request("GET", "/containers/json")
-  # request("POST", "/containers/abc/attach?stream=1&stdin=1&stdout=1")
-  #
-  # To post data you need to add a Content-Type and a Content-Length header to the
-  # request and then send the data to the socket
-  def request(method, path, data \\ "", target \\ {:local, "/var/run/docker.sock"}) do
+  @doc """
+  Sends an HTTP request with the specified method, path and body data to the
+  docker daemon.
+
+  Valid options are:
+    :target - the target to send the request to, either {:local, "/path/to/unix.socket"} or
+              {host, port} with host a valid :gen_tcp host (e.g. {127, 0, 0, 1})
+    :stream - returns an Elixir `Stream` for chunked responses instead of the body as binary
+
+  ## Examples
+
+      iex> ContainerLib.Docker.Client.request("GET", "/containers/json")
+      {:ok, %ContainerLib.Docker.Client{status: 200}, []}
+
+      iex> ContainerLib.Docker.Client.request("POST", "/containers/abc/attach?stream=1&stdin=1&stdout=1")
+      {:stream, %ContainerLib.Docker.Client{}, _socket}
+
+  ## Pro-Tip
+
+  You can use `socat -d -v -d TCP-L:2375,fork UNIX:/var/run/docker.sock` to proxy requests
+  to the docker daemon over TCP and use `DOCKER_HOST=tcp://127.0.0.1:2376 docker --args` to
+  view what the docker cli is doing.
+
+  """
+  def request(method, path, data \\ "", opts \\ []) do
+    target = Keyword.get(opts, :target, {:local, "/var/run/docker.sock"})
+
+    recv_options = %D{stream: Keyword.get(opts, :stream, false)}
+
     {:ok, socket} =
       case target do
         {:local, _unix_sock} ->
@@ -60,30 +84,11 @@ defmodule ContainerLib.Docker.Client do
         )
     end
 
-    do_recv(socket)
+    do_recv(socket, recv_options)
   end
 
-  # Reads from tty. In case of non tty you need to read
-  # {:packet, :raw} and decode as described under Stream Format here: https://docs.docker.com/engine/api/v1.40/#operation/ContainerAttach
-  # For now just read lines from TTY or timeout after 5 seconds if nothing to be read
-  # This requires an attached socket:
-  # {:stream, _, socket} = request("POST", "/containers/abc/attach?stream=1&stdin=1&stdout=1")
-  # read_stream(socket)
-  def read_stream(socket) do
-    :inet.setopts(socket, [{:packet, :line}])
-    :gen_tcp.recv(socket, 0, 5000)
-  end
-
-  # Writes to attached container
-  # This requires an attached socket:
-  # {:stream, _, socket} = request("POST", "/containers/abc/attach?stream=1&stdin=1&stdout=1")
-  # write_stream(socket, "echo \"Hello World\"\r\n")
-  # read_stream(socket)
-  def write_stream(socket, data) do
-    :gen_tcp.send(socket, data)
-  end
-
-  defp do_recv(socket), do: do_recv(socket, :gen_tcp.recv(socket, 0, 5000), %D{})
+  defp do_recv(socket, resp),
+    do: do_recv(socket, :gen_tcp.recv(socket, 0, 5000), resp)
 
   defp do_recv(socket, {:ok, {:http_response, {1, 1}, code, _}}, resp) do
     do_recv(socket, :gen_tcp.recv(socket, 0, 5000), %D{resp | status: code})
@@ -91,6 +96,13 @@ defmodule ContainerLib.Docker.Client do
 
   defp do_recv(socket, {:ok, {:http_header, _, h, _, v}}, resp) do
     do_recv(socket, :gen_tcp.recv(socket, 0, 5000), %D{resp | headers: [{h, v} | resp.headers]})
+  end
+
+  defp do_recv(socket, {:ok, :http_eoh}, resp = %D{stream: true}) do
+    case :proplists.get_value(:"Transfer-Encoding", resp.headers) do
+      "chunked" -> {:ok, resp, create_stream(socket)}
+      _other -> {:error, "cannot stream without Transfer-Encoding: chunked"}
+    end
   end
 
   defp do_recv(socket, {:ok, :http_eoh}, resp) do
@@ -105,9 +117,13 @@ defmodule ContainerLib.Docker.Client do
         {:stream, resp, socket}
 
       "application/json" ->
-        with {:ok, data} <- read_body(socket, resp), do: {:ok, resp, Jason.decode!(data)}
+        with {:ok, data} <- read_body(socket, resp) do
+          Logger.debug("got json response: #{inspect(data)}")
+          {:ok, resp, Jason.decode!(data)}
+        end
 
-      _ ->
+      other ->
+        Logger.debug("unexpected content type: #{other}")
         {:ok, resp, read_body(socket, resp)}
     end
   end
@@ -151,5 +167,53 @@ defmodule ContainerLib.Docker.Client do
       other ->
         {:error, other}
     end
+  end
+
+  # creates an Elixir `Stream` for the chunked response
+  defp create_stream(socket) do
+    Stream.resource(
+      fn -> socket end,
+      fn socket ->
+        :inet.setopts(socket, [{:packet, :line}])
+
+        case :gen_tcp.recv(socket, 0, 5000) do
+          {:ok, length} ->
+            length = String.trim_trailing(length, "\r\n") |> String.to_integer(16)
+
+            if length == 0 do
+              {:halt, socket}
+            else
+              :inet.setopts(socket, [{:packet, :raw}])
+              {:ok, data} = :gen_tcp.recv(socket, length, 5000)
+              :gen_tcp.recv(socket, 2, 5000)
+              {[data], socket}
+            end
+
+          _other ->
+            {:halt, {:error, socket}}
+        end
+      end,
+      fn _socket -> nil end
+    )
+  end
+
+  # Reads from tty. In case of non tty you need to read
+  # {:packet, :raw} and decode as described under Stream Format here: https://docs.docker.com/engine/api/v1.40/#operation/ContainerAttach
+  # For now just read lines from TTY or timeout after 5 seconds if nothing to be read
+  # This requires an attached socket:
+  # {:stream, _, socket} = request("POST", "/containers/abc/attach?stream=1&stdin=1&stdout=1")
+  # read_stream(socket)
+  def read_stream(socket) do
+    :inet.setopts(socket, [{:packet, :line}])
+    :gen_tcp.recv(socket, 0, 5000)
+  end
+
+  # Writes to attached container
+  # This requires an attached socket:
+  # {:stream, _, socket} = request("POST", "/containers/abc/attach?stream=1&stdin=1&stdout=1")
+  # write_stream(socket, "echo \"Hello World\"\r\n")
+  # read_stream(socket)
+  def write_stream(socket, data) do
+    :gen_tcp.send(socket, data)
   end
 end

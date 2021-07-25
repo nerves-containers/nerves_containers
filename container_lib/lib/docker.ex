@@ -18,13 +18,16 @@ defmodule ContainerLib.Docker do
 
     ignore_version = Keyword.get(opts, :no_version, false)
     body = Keyword.get(opts, :body, "")
+    request_opts = Keyword.get(opts, :request_opts, [])
+
+    client_opts = Keyword.merge([target: socket()], request_opts)
 
     cond do
       String.starts_with?(path, "/v1.") or ignore_version ->
-        Client.request(method, "#{path}?#{query}", body, socket())
+        Client.request(method, "#{path}?#{query}", body, client_opts)
 
       true ->
-        Client.request(method, "/#{api_version()}#{path}?#{query}", body, socket())
+        Client.request(method, "/#{api_version()}#{path}?#{query}", body, client_opts)
     end
   end
 
