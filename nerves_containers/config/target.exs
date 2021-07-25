@@ -4,6 +4,9 @@ import Config
 # docs for separating out critical OTP applications such as those
 # involved with firmware updates.
 
+config :container_manager,
+  docker_socket: {:local, "/var/run/balena-engine.sock"}
+
 config :shoehorn,
   init: [:nerves_runtime, :nerves_pack],
   app: Mix.Project.config()[:app]

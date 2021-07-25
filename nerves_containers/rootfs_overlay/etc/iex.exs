@@ -21,3 +21,5 @@ if RingLogger in Application.get_env(:logger, :backends, []) do
     RingLogger.next
   """)
 end
+
+Process.put(:docker_socket, Application.get_env(:container_manager, :docker_socket))
