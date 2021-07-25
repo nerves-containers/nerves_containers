@@ -44,6 +44,6 @@ defmodule ContainerManager.Application do
   end
 
   def target() do
-    Application.get_env(:container_manager, :target)
+    Application.get_env(:container_manager, :target, :host)
   end
 end
