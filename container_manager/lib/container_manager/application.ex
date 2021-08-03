@@ -12,7 +12,9 @@ defmodule ContainerManager.Application do
     opts = [strategy: :one_for_one, name: ContainerManager.Supervisor]
 
     if target() != :host do
-      MuonTrap.cmd("cgroupfs-mount", [])
+      # MuonTrap.cmd("cgroupfs-mount", [])
+      # create directory for the balena-engine, symlinked to /etc
+      File.mkdir_p("/data/etc/balena-engine")
     end
 
     children =
@@ -39,7 +41,16 @@ defmodule ContainerManager.Application do
       # Children for all targets except host
       # Starts a worker by calling: ContainerManager.Worker.start_link(arg)
       # {ContainerManager.Worker, arg},
-      {MuonTrap.Daemon, ["balena-engine-daemon", ["--data-root", "/data/balena"], []]}
+      {MuonTrap.Daemon,
+       [
+         "balena-engine-daemon",
+         [
+           "--data-root",
+           "/data/balena",
+           "--experimental"
+         ],
+         []
+       ]}
     ]
   end
 

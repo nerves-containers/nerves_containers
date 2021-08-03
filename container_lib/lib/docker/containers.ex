@@ -3,10 +3,26 @@ defmodule ContainerLib.Docker.Containers do
   Functions for managing docker containers.
   """
 
+  defstruct [
+    :id,
+    :name,
+    :image,
+    :entrypoint,
+    :command,
+    hostname: "",
+    user: "",
+    working_dir: "",
+    remove: false,
+    volumes: %{},
+    ports: %{},
+    environment: %{},
+    host_config: %{"network_mode" => "default"}
+  ]
+
   require Logger
 
   import ContainerLib.Docker, only: [request: 2, request: 3]
-  alias ContainerLib.Container
+  alias ContainerLib.Docker.Containers, as: Container
   alias ContainerLib.Docker.LogParser
 
   @doc """
