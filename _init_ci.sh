@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/".insteadOf "https://gitlab.com/"
+
 mkdir -p ~/.ssh
 eval "$(ssh-agent)"
 echo "$NERVES_SSH_KEY" > ~/.ssh/id_rsa.pub

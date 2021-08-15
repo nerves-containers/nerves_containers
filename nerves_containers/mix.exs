@@ -38,6 +38,16 @@ defmodule NervesContainers.MixProject do
     ]
   end
 
+  defp gitlab_prefix() do
+    if System.get_env("CI") != nil do
+      # use HTTPS cloning in gitlab CI
+      "https://gitlab.com/"
+    else
+      # use SSH in any other case
+      "git@gitlab.com:"
+    end
+  end
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
@@ -54,23 +64,23 @@ defmodule NervesContainers.MixProject do
 
       # Dependencies for specific targets
       {:nerves_containers_rpi,
-       git: "git@github.com:nerves-containers/nerves_containers_rpi.git",
+       git: gitlab_prefix() <> "nerves-containers/nerves_containers_rpi.git",
        tag: "development",
        runtime: false,
        targets: :rpi},
       {:nerves_containers_rpi4,
-       git: "git@github.com:nerves-containers/nerves_containers_rpi4.git",
+       git: gitlab_prefix() <> "nerves-containers/nerves_containers_rpi4.git",
        tag: "development",
        runtime: false,
        targets: :rpi4},
       {:nerves_containers_x86_64,
-       git: "git@github.com:nerves-containers/nerves_containers_x86_64.git",
+       git: gitlab_prefix() <> "nerves-containers/nerves_containers_x86_64.git",
        tag: "development",
        runtime: false,
        targets: :x86_64},
       {:nerves_containers_x86_64_uefi,
-       git: "git@github.com:nerves-containers/nerves_containers_x86_64.git",
-       tag: "development-uefi",
+       git: gitlab_prefix() <> "nerves-containers/nerves_containers_x86_64_uefi.git",
+       tag: "development",
        runtime: false,
        targets: :x86_64_efi}
     ]
