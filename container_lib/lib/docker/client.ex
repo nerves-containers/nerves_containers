@@ -54,6 +54,8 @@ defmodule ContainerLib.Docker.Client do
           ])
       end
 
+    Logger.debug("sending #{inspect(path)}: #{inspect(data)}")
+
     case data do
       %{} ->
         body = Jason.encode!(data)
@@ -106,6 +108,7 @@ defmodule ContainerLib.Docker.Client do
   end
 
   defp do_recv(socket, {:ok, :http_eoh}, resp) do
+    Logger.debug("#{inspect(resp)}")
     # Now we only have body left.
     # Depending on headers here you may want to do different things.
     # The response might be chunked, or upgraded in case you have attached to the container
@@ -114,6 +117,7 @@ defmodule ContainerLib.Docker.Client do
     case :proplists.get_value(:"Content-Type", resp.headers) do
       # Return the socket for bi-directional communication
       "application/vnd.docker.raw-stream" ->
+        Logger.debug("it's a stream")
         {:stream, resp, socket}
 
       "application/json" ->
