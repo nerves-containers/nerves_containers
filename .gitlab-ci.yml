@@ -48,7 +48,7 @@ build_x86_64:
       - development
 
 build_x86_64_uefi:
-  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:development
   stage: build
   variables:
     MIX_TARGET: x86_64_efi
@@ -64,6 +64,7 @@ build_x86_64_uefi:
     refs:
       - main
       - development
+      - development-test
 
 build_rpi:
   image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
