@@ -63,9 +63,9 @@ defmodule NervesContainers.MixProject do
       {:nerves_pack, "~> 0.4.0", targets: @all_targets},
 
       # Dependencies for specific targets
-      {:nerves_system_up_board,
+      {:nerves_containers_x86_64_uefi,
        git: gitlab_prefix() <> "nerves-containers/nerves_containers_x86_64_uefi.git",
-       tag: "development-test",
+       tag: "development",
        runtime: false,
        targets: :x86_64_efi}
     ]
