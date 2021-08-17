@@ -23,8 +23,7 @@ config :nerves_runtime, :kernel, use_system_registry: false
 
 config :nerves,
   erlinit: [
-    hostname_pattern: "nerves-%s",
-    verbose: true
+    hostname_pattern: "nerves-%s"
   ]
 
 # Configure the device for SSH IEx prompt access and firmware updates
