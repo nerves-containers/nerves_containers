@@ -11,24 +11,6 @@ stages:
 
 #####################
 
-build_rpi4:
-  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
-  stage: build
-  variables:
-    MIX_TARGET: rpi4
-  before_script:
-    - cd nerves_containers/
-    - bash ../_init_ci.sh
-  script:
-    - mix firmware --verbosity=quiet
-  artifacts:
-    paths:
-      - nerves_containers/_build/rpi4_dev/nerves/images/*.fw
-  only:
-    refs:
-      - main
-      - development
-
 build_x86_64:
   image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
   stage: build
@@ -78,6 +60,60 @@ build_rpi:
   artifacts:
     paths:
       - nerves_containers/_build/rpi_dev/nerves/images/*.fw
+  only:
+    refs:
+      - main
+      - development
+
+build_rpi3:
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
+  stage: build
+  variables:
+    MIX_TARGET: rpi3
+  before_script:
+    - cd nerves_containers/
+    - bash ../_init_ci.sh
+  script:
+    - mix firmware --verbosity=quiet
+  artifacts:
+    paths:
+      - nerves_containers/_build/rpi3_dev/nerves/images/*.fw
+  only:
+    refs:
+      - main
+      - development
+
+build_rpi3_64:
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
+  stage: build
+  variables:
+    MIX_TARGET: rpi3_64
+  before_script:
+    - cd nerves_containers/
+    - bash ../_init_ci.sh
+  script:
+    - mix firmware --verbosity=quiet
+  artifacts:
+    paths:
+      - nerves_containers/_build/rpi3_64_dev/nerves/images/*.fw
+  only:
+    refs:
+      - main
+      - development
+
+build_rpi4:
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
+  stage: build
+  variables:
+    MIX_TARGET: rpi4
+  before_script:
+    - cd nerves_containers/
+    - bash ../_init_ci.sh
+  script:
+    - mix firmware --verbosity=quiet
+  artifacts:
+    paths:
+      - nerves_containers/_build/rpi4_dev/nerves/images/*.fw
   only:
     refs:
       - main
