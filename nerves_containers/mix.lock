@@ -9,7 +9,7 @@
   "nerves": {:hex, :nerves, "1.7.11", "67820b7055b541ce20f7bce40672a06268673ba8c47576a76e703d537a136a74", [:make, :mix], [{:elixir_make, "~> 0.6", [hex: :elixir_make, repo: "hexpm", optional: false]}, {:jason, "~> 1.2", [hex: :jason, repo: "hexpm", optional: true]}], "hexpm", "79535d00928c81a93ea5311497b00f0ca7bc0a8aa405134d16597a02b2616e89"},
   "nerves_containers_rpi": {:git, "git@gitlab.com:nerves-containers/nerves_containers_rpi.git", "9a5daede0ed29e5f7ba81826ee8fdcf5fe735f11", [tag: "development"]},
   "nerves_containers_rpi3": {:git, "git@gitlab.com:nerves-containers/nerves_containers_rpi3.git", "9af0c6b9e5242d72fc64bcde7a60fb3e89d48643", [tag: "development"]},
-  "nerves_containers_rpi3_64": {:git, "git@gitlab.com:nerves-containers/nerves_containers_rpi3.git", "770d3c5a9d79c8e10f7a6410ad840ee29e79ed1c", [tag: "development-64"]},
+  "nerves_containers_rpi3_64": {:git, "git@gitlab.com:nerves-containers/nerves_containers_rpi3.git", "0443551999f60b4017576202dc2f276cf00dc5f1", [tag: "development-64"]},
   "nerves_containers_rpi4": {:git, "git@gitlab.com:nerves-containers/nerves_containers_rpi4.git", "867b75440c5a9760d067806e35e9a946ebaafb7e", [tag: "development"]},
   "nerves_containers_x86_64": {:git, "git@gitlab.com:nerves-containers/nerves_containers_x86_64.git", "986d302a59129a6652b1633341b5eaa09779a378", [tag: "development"]},
   "nerves_containers_x86_64_uefi": {:git, "git@gitlab.com:nerves-containers/nerves_containers_x86_64_uefi.git", "3f721185e550c87aac1fc0156872e6b1ced0dacb", [tag: "development"]},
