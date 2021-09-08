@@ -118,3 +118,21 @@ build_rpi4:
     refs:
       - main
       - development
+
+build_bananapi_m1:
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
+  stage: build
+  variables:
+    MIX_TARGET: bananapi_m1
+  before_script:
+    - cd nerves_containers/
+    - bash ../_init_ci.sh
+  script:
+    - mix firmware --verbosity=quiet
+  artifacts:
+    paths:
+      - nerves_containers/_build/bananapi_m1_dev/nerves/images/*.fw
+  only:
+    refs:
+      - main
+      - development

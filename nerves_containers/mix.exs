@@ -14,7 +14,8 @@ defmodule NervesContainers.MixProject do
     # :bbb,
     # :osd32mp1,
     :x86_64,
-    :x86_64_efi
+    :x86_64_efi,
+    :bananapi_m1
   ]
 
   def project do
@@ -93,7 +94,12 @@ defmodule NervesContainers.MixProject do
        git: gitlab_prefix() <> "nerves-containers/nerves_containers_x86_64_uefi.git",
        tag: "development",
        runtime: false,
-       targets: :x86_64_efi}
+       targets: :x86_64_efi},
+      {:nerves_containers_bananapi_m1,
+       git: gitlab_prefix() <> "nerves-containers/nerves_containers_bananapi_m1.git",
+       tag: "main",
+       runtime: false,
+       targets: :bananapi_m1}
     ]
   end
 
