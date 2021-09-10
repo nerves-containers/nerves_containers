@@ -13,4 +13,4 @@ ssh-keyscan github.com >> ~/.ssh/known_hosts
 mix local.rebar --force
 mix local.hex --force
 mix archive.install --force hex nerves_bootstrap
-mix deps.get
+mix deps.get --target $MIX_TARGET
