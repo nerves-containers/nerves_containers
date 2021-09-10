@@ -11,7 +11,7 @@
   "mime": {:hex, :mime, "2.0.1", "0de4c81303fe07806ebc2494d5321ce8fb4df106e34dd5f9d787b637ebadc256", [:mix], [], "hexpm", "7a86b920d2aedce5fb6280ac8261ac1a739ae6c1a1ad38f5eadf910063008942"},
   "muontrap": {:hex, :muontrap, "0.6.1", "fa11dc9152470c4d0ce5a5fcb6524d8c1edc9bf6d63b3f6a89096f1e751ae271", [:make, :mix], [{:elixir_make, "~> 0.6", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm", "86d1ef2fa0a30435a1d595e96f631ad4a24a931d8d855688e012fadd7147bd1d"},
   "nerves": {:hex, :nerves, "1.7.11", "67820b7055b541ce20f7bce40672a06268673ba8c47576a76e703d537a136a74", [:make, :mix], [{:elixir_make, "~> 0.6", [hex: :elixir_make, repo: "hexpm", optional: false]}, {:jason, "~> 1.2", [hex: :jason, repo: "hexpm", optional: true]}], "hexpm", "79535d00928c81a93ea5311497b00f0ca7bc0a8aa405134d16597a02b2616e89"},
-  "nerves_containers_bananapi_m1": {:git, "git@gitlab.com:nerves-containers/nerves_containers_bananapi_m1.git", "130b2b5bff451459af44427624599407299941c0", [tag: "main"]},
+  "nerves_containers_bananapi_m1": {:git, "git@gitlab.com:nerves-containers/nerves_containers_bananapi_m1.git", "a6511f6ab25dad0232df0f0655d9aa16cb242ebe", [tag: "development"]},
   "nerves_containers_rpi": {:git, "git@gitlab.com:nerves-containers/nerves_containers_rpi.git", "1207ae9275da53360d89d07ee68aa55f5f1c3551", [tag: "development"]},
   "nerves_containers_rpi3": {:git, "git@gitlab.com:nerves-containers/nerves_containers_rpi3.git", "6abae9445c6ef2fc87f21c981d2cd292bbe4215e", [tag: "development"]},
   "nerves_containers_rpi3_64": {:git, "git@gitlab.com:nerves-containers/nerves_containers_rpi3.git", "3678f9d90ba2deba07aac6c7b6b08cfa73b3dd5f", [tag: "development-64"]},

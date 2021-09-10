@@ -100,7 +100,7 @@ defmodule NervesContainers.MixProject do
        targets: :x86_64_efi},
       {:nerves_containers_bananapi_m1,
        git: gitlab_prefix() <> "nerves-containers/nerves_containers_bananapi_m1.git",
-       tag: "main",
+       tag: "development",
        runtime: false,
        targets: :bananapi_m1}
     ]
