@@ -64,6 +64,9 @@ defmodule NervesContainers.MixProject do
       {:nerves_runtime, "~> 0.11.3", targets: @all_targets},
       {:nerves_pack, "~> 0.5.0", targets: @all_targets},
 
+      # wifi
+      {:vintage_net_wizard, "~> 0.4"},
+
       # Dependencies for specific targets
       {:nerves_containers_rpi,
        git: gitlab_prefix() <> "nerves-containers/nerves_containers_rpi.git",

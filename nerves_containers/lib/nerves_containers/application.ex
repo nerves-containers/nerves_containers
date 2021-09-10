@@ -26,6 +26,7 @@ defmodule NervesContainers.Application do
       # Children that only run on the host
       # Starts a worker by calling: NervesContainers.Worker.start_link(arg)
       # {NervesContainers.Worker, arg},
+      NervesContainers.NetworkManager
     ]
   end
 
@@ -34,6 +35,7 @@ defmodule NervesContainers.Application do
       # Children for all targets except host
       # Starts a worker by calling: NervesContainers.Worker.start_link(arg)
       # {NervesContainers.Worker, arg},
+      NervesContainers.NetworkManager
     ]
   end
 
