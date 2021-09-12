@@ -22,9 +22,14 @@ defmodule NervesContainers.NetworkManager do
   @impl true
   def handle_continue(:try_wizard, state) do
     interfaces =
-      VintageNet.get(["available_interfaces"])
+      VintageNet.get_by_prefix(["interface"])
+      |> Enum.filter(fn
+        {["interface", _iface, "present"], true} -> true
+        _other -> false
+      end)
+      |> Enum.map(fn {["interface", iface, "present"], true} -> iface end)
       |> Enum.filter(fn iface ->
-        VintageNet.get(["interface", iface, "type"]) == VintageNetWifi
+        VintageNet.get(["interface", iface, "type"]) == VintageNetWiFi
       end)
 
     if length(interfaces) > 0 do
