@@ -4,6 +4,7 @@ variables:
   DOCKER_TLS_VERIFY: 1
   DOCKER_TLS_CERTDIR: "/certs"
   DOCKER_CERT_PATH: "/certs/client"
+  NERVES_BUILD_VERSION: 1.17.0
 
 stages:
   - prepare
@@ -12,7 +13,7 @@ stages:
 #####################
 
 build_x86_64:
-  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$NERVES_BUILD_VERSION
   stage: build
   variables:
     MIX_TARGET: x86_64
@@ -30,7 +31,7 @@ build_x86_64:
       - development
 
 build_x86_64_uefi:
-  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$NERVES_BUILD_VERSION
   stage: build
   variables:
     MIX_TARGET: x86_64_efi
@@ -48,7 +49,7 @@ build_x86_64_uefi:
       - development
 
 build_rpi:
-  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$NERVES_BUILD_VERSION
   stage: build
   variables:
     MIX_TARGET: rpi
@@ -66,7 +67,7 @@ build_rpi:
       - development
 
 build_rpi3:
-  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$NERVES_BUILD_VERSION
   stage: build
   variables:
     MIX_TARGET: rpi3
@@ -84,7 +85,7 @@ build_rpi3:
       - development
 
 build_rpi3_64:
-  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$NERVES_BUILD_VERSION
   stage: build
   variables:
     MIX_TARGET: rpi3_64
@@ -102,7 +103,7 @@ build_rpi3_64:
       - development
 
 build_rpi4:
-  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$NERVES_BUILD_VERSION
   stage: build
   variables:
     MIX_TARGET: rpi4
@@ -120,7 +121,7 @@ build_rpi4:
       - development
 
 build_bananapi_m1:
-  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$CI_COMMIT_REF_NAME
+  image: $CI_REGISTRY/nerves-containers/nerves_ci/buildimage:$NERVES_BUILD_VERSION
   stage: build
   variables:
     MIX_TARGET: bananapi_m1
