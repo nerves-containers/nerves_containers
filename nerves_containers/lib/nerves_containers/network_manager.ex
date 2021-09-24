@@ -56,7 +56,11 @@ defmodule NervesContainers.NetworkManager do
 
   @impl true
   def handle_info(:timeout, state) do
-    {:noreply, state, {:continue, :try_wizard}}
+    if function_exported?(VintageNetWizard, :run_if_unconfigured, 1) do
+      {:noreply, state, {:continue, :try_wizard}}
+    else
+      {:noreply, state}
+    end
   end
 
   ## Client API

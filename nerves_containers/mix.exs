@@ -18,6 +18,14 @@ defmodule NervesContainers.MixProject do
     :bananapi_m1
   ]
 
+  @wifi_targets [
+    :rpi3,
+    :rpi3_64,
+    :rpi4,
+    :x86_64,
+    :x86_64_efi
+  ]
+
   def project do
     [
       app: @app,
@@ -65,7 +73,7 @@ defmodule NervesContainers.MixProject do
       {:nerves_pack, "~> 0.5.0", targets: @all_targets},
 
       # wifi
-      {:vintage_net_wizard, "~> 0.4"},
+      {:vintage_net_wizard, "~> 0.4", targets: @wifi_targets},
 
       # Dependencies for specific targets
       {:nerves_containers_rpi,
