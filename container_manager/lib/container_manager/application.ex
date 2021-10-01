@@ -12,9 +12,14 @@ defmodule ContainerManager.Application do
     opts = [strategy: :one_for_one, name: ContainerManager.Supervisor]
 
     if target() != :host do
-      # MuonTrap.cmd("cgroupfs-mount", [])
+      if Application.get_env(:container_manager, :use_cgroupfs_mount, false) do
+        MuonTrap.cmd("cgroupfs-mount", [])
+      end
       # create directory for the balena-engine, symlinked to /etc
       File.mkdir_p("/data/etc/balena-engine")
+      # write daemon config
+      daemon_config = Application.get_env(:container_manager, :daemon_config, %{})
+      File.write!("/data/etc/balena-engine/daemon.json", Jason.encode!(daemon_config))
     end
 
     children =

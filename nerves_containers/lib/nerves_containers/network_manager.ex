@@ -56,11 +56,19 @@ defmodule NervesContainers.NetworkManager do
 
   @impl true
   def handle_info(:timeout, state) do
-    if function_exported?(VintageNetWizard, :run_if_unconfigured, 1) do
+    if wizard_available?() do
       {:noreply, state, {:continue, :try_wizard}}
     else
       {:noreply, state}
     end
+  end
+
+  defp wizard_available?() do
+    0 !=
+      :code.get_path()
+      |> Enum.map(&List.to_string/1)
+      |> Enum.filter(fn path -> path =~ ~r/vintage_net_wizard/ end)
+      |> length
   end
 
   ## Client API

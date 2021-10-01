@@ -5,7 +5,10 @@ import Config
 # involved with firmware updates.
 
 config :container_manager,
-  docker_socket: {:local, "/var/run/balena-engine.sock"}
+  docker_socket: {:local, "/var/run/balena-engine.sock"},
+  daemon_config: %{
+    "resolv-conf" => "/tmp/resolv.conf"
+  }
 
 config :shoehorn,
   init: [:nerves_runtime, :nerves_pack],
