@@ -1,0 +1,11 @@
+{
+    "private": true,
+    "scripts": {},
+    "dependencies": {
+        "alpinejs": "^3.x",
+        "xterm": "^4.14.1"
+    },
+    "devDependencies": {
+        "topbar": "^1.0.1"
+    }
+}

@@ -80,7 +80,7 @@ defmodule ContainerLib.Docker.Containers do
   See https://docs.docker.com/engine/api/v1.40/#operation/ContainerInspect
   """
   def get(id) do
-    request("GET", "/containers/#{id}")
+    request("GET", "/containers/#{id}/json")
   end
 
   @doc """

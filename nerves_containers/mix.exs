@@ -67,6 +67,7 @@ defmodule NervesContainers.MixProject do
       {:ring_logger, "~> 0.8.1"},
       {:toolshed, "~> 0.2.13"},
       {:container_manager, path: "../container_manager"},
+      {:container_ui, path: "../container_ui"},
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.11.3", targets: @all_targets},
