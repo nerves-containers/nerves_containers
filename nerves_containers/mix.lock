@@ -15,7 +15,7 @@
   "nerves_containers_bananapi_m1": {:git, "git@gitlab.com:nerves-containers/nerves_containers_bananapi_m1.git", "2a5bb55b7904f8c181bd2606a73a0f113dbed056", [branch: "development"]},
   "nerves_containers_rpi": {:git, "git@gitlab.com:nerves-containers/nerves_containers_rpi.git", "efc4b40c689e8e832117cd3b5285ad753f004e39", [branch: "development"]},
   "nerves_containers_rpi3": {:git, "git@gitlab.com:nerves-containers/nerves_containers_rpi3.git", "c712c618f9356a12a7bb80e033642091570535d5", [branch: "development"]},
-  "nerves_containers_rpi3_64": {:git, "git@gitlab.com:nerves-containers/nerves_containers_rpi3.git", "9fa1aee621ed224e4f1e6ed2acf75acc079e6fbf", [branch: "development-64"]},
+  "nerves_containers_rpi3_64": {:git, "git@gitlab.com:nerves-containers/nerves_containers_rpi3.git", "1df019b4d6e93e20be6b3e20ef352fdc3ff941e5", [branch: "development-64"]},
   "nerves_containers_rpi4": {:git, "git@gitlab.com:nerves-containers/nerves_containers_rpi4.git", "76339ed1453417f948f07753991afd8a65f8fca0", [branch: "development"]},
   "nerves_containers_x86_64": {:git, "git@gitlab.com:nerves-containers/nerves_containers_x86_64.git", "fbd8fbb793e35b92bfa82c4173461dee682ac978", [branch: "development"]},
   "nerves_containers_x86_64_uefi": {:git, "git@gitlab.com:nerves-containers/nerves_containers_x86_64_uefi.git", "4cd83312fdf9b81eeb10d33c069719e3bde07d5c", [branch: "development"]},
