@@ -4,7 +4,7 @@ variables:
   DOCKER_TLS_VERIFY: 1
   DOCKER_TLS_CERTDIR: "/certs"
   DOCKER_CERT_PATH: "/certs/client"
-  NERVES_BUILD_VERSION: 1.17.0
+  NERVES_BUILD_VERSION: 1.19.1
 
 stages:
   - prepare
