@@ -15,6 +15,16 @@ defmodule NervesContainers.Application do
         # Children for all targets
         # Starts a worker by calling: NervesContainers.Worker.start_link(arg)
         # {NervesContainers.Worker, arg},
+        {NervesSSH,
+         {:shell,
+          NervesSSH.Options.with_defaults(
+            Application.get_all_env(:nerves_ssh)
+            |> Keyword.merge(
+              port: 2222,
+              shell: :disabled,
+              cli: {NervesSSHShell.CLI, []}
+            )
+          )}}
       ] ++ children(target())
 
     Supervisor.start_link(children, opts)
