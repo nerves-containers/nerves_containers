@@ -3,6 +3,8 @@ defmodule ContainerUIWeb.ContainerLive do
 
   @impl true
   def mount(%{"id" => id}, _session, socket) do
+    Process.put(:docker_socket, Application.fetch_env!(:container_ui, :docker_socket))
+
     if connected?(socket) do
       with {:ok, %{status: 200}, container} <- ContainerLib.Docker.Containers.get(id) do
         {:ok, assign(socket, container: container, error: false)}
@@ -41,12 +43,14 @@ defmodule ContainerUIWeb.ContainerLive do
 
   @impl true
   def handle_event("input", value, socket) do
+    IO.inspect(value, label: "received from ui")
     :ok = :gen_tcp.send(socket.assigns.exec_sock, value)
     {:noreply, socket}
   end
 
   @impl true
   def handle_info({:tcp, _tcp_socket, data}, socket) do
+    IO.inspect(data, label: "received from docker")
     {:noreply, push_event(socket, "docker_line", %{"data" => data})}
   end
 

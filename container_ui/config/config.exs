@@ -8,7 +8,7 @@
 import Config
 
 config :container_ui,
-  docker_socket: {:local, "/var/run/docker.sock"}
+  docker_socket: {:local, "/Users/steffen/.colima/default/docker.sock"}
 
 # Configures the endpoint
 config :container_ui, ContainerUIWeb.Endpoint,

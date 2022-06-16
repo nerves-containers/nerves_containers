@@ -14,7 +14,19 @@ defmodule ContainerUI.Application do
       {Phoenix.PubSub, name: ContainerUI.PubSub},
       # Start the Endpoint (http/https)
       ContainerUIWeb.Endpoint,
-      ContainerUI.ExecMonitor
+      ContainerUI.ExecMonitor,
+      {NervesSSH,
+       %NervesSSH.Options{
+         authorized_keys: [File.read!(Path.join(System.user_home!(), ".ssh/id_rsa.pub"))],
+         port: 2222,
+         system_dir: File.cwd!(),
+         cli: {ContainerUI.DockerExecSSH, []},
+         shell: :erlang,
+         subsystems: [
+           {'docker', {ContainerUI.DockerExecSSH, []}}
+         ],
+         daemon_option_overrides: [user_dir: File.cwd!() |> to_charlist()]
+       }}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -45,7 +45,8 @@ defmodule ContainerUI.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:container_lib, path: "../container_lib"}
+      {:container_lib, path: "../container_lib"},
+      {:nerves_ssh, "~> 0.3.0"}
     ]
   end
 

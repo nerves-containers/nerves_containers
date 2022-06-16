@@ -33,7 +33,7 @@ defmodule ContainerLib.Docker.Client do
 
   """
   def request(method, path, data \\ "", opts \\ []) do
-    target = Keyword.get(opts, :target, {:local, "/var/run/docker.sock"})
+    target = Keyword.get(opts, :target, {:local, "/var/run/docker.sock"}) |> IO.inspect()
 
     recv_options = %D{stream: Keyword.get(opts, :stream, false)}
 

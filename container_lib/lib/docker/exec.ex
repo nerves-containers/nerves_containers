@@ -70,4 +70,11 @@ defmodule ContainerLib.Docker.Exec do
       }
     )
   end
+
+  @doc """
+  Resize the specific exec instance.
+  """
+  def resize(id, opts \\ []) do
+    request("POST", "/exec/#{id}/resize", query: opts)
+  end
 end

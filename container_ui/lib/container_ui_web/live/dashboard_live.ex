@@ -2,6 +2,8 @@ defmodule ContainerUIWeb.DashboardLive do
   use ContainerUIWeb, :live_view
 
   def mount(_params, _session, socket) do
+    Process.put(:docker_socket, Application.fetch_env!(:container_ui, :docker_socket))
+
     with {:ok, %{status: 200}, containers} <- ContainerLib.Docker.Containers.list(all: true) do
       {:ok, assign(socket, containers: containers, error: false)}
     else
