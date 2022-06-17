@@ -11,6 +11,11 @@ config :shoehorn,
   init: [:nerves_runtime, :nerves_pack],
   app: Mix.Project.config()[:app]
 
+config :erlexec,
+  root: true,
+  user: "root",
+  limit_users: ["root"]
+
 # Nerves Runtime can enumerate hardware devices and send notifications via
 # SystemRegistry. This slows down startup and not many programs make use of
 # this feature.
@@ -23,7 +28,9 @@ config :nerves_runtime, :kernel, use_system_registry: false
 
 config :nerves,
   erlinit: [
-    hostname_pattern: "nerves-%s"
+    hostname_pattern: "nerves-%s",
+    # erlexec needs the SHELL variable
+    env: "SHELL=/bin/sh"
   ]
 
 # Configure the device for SSH IEx prompt access and firmware updates
