@@ -63,7 +63,7 @@ defmodule NervesContainers.MixProject do
     [
       # Dependencies for all targets
       {:nerves, "~> 1.7.0", runtime: false},
-      {:shoehorn, "~> 0.7.0"},
+      {:shoehorn, "~> 0.9.1"},
       {:ring_logger, "~> 0.8.1"},
       {:toolshed, "~> 0.2.13"},
       {:container_manager, path: "../container_manager"},
@@ -71,8 +71,8 @@ defmodule NervesContainers.MixProject do
       {:nerves_ssh_shell, github: "SteffenDE/nerves_ssh_shell", branch: "main"},
 
       # Dependencies for all targets except :host
-      {:nerves_runtime, "~> 0.11.3"},
-      {:nerves_pack, "~> 0.5.0", targets: @all_targets},
+      {:nerves_runtime, "~> 0.12.0"},
+      {:nerves_pack, "~> 0.7.0", targets: @all_targets},
 
       # wifi
       {:vintage_net_wizard, "~> 0.4", targets: @wifi_targets},
