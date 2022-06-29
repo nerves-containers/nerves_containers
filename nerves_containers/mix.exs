@@ -69,6 +69,7 @@ defmodule NervesContainers.MixProject do
       {:container_manager, path: "../container_manager"},
       {:nerves_ssh, github: "SteffenDE/nerves_ssh", branch: "cli", override: true},
       {:nerves_ssh_shell, github: "SteffenDE/nerves_ssh_shell", branch: "main"},
+      # {:nerves_ssh_shell, path: "../../nerves_ssh_shell"},
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.12.0"},
