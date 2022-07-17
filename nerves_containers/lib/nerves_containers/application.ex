@@ -22,7 +22,7 @@ defmodule NervesContainers.Application do
              name: :shell,
              port: 2222,
              shell: :disabled,
-             daemon_option_overrides: [{:ssh_cli, {NervesSSHShell.CLI, []}}]
+             daemon_option_overrides: [{:ssh_cli, {NervesSSH.SystemShell, []}}]
            )
          )}
       ] ++ children(target())

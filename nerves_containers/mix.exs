@@ -67,9 +67,8 @@ defmodule NervesContainers.MixProject do
       {:ring_logger, "~> 0.8.1"},
       {:toolshed, "~> 0.2.13"},
       {:container_manager, path: "../container_manager"},
-      {:nerves_ssh, github: "SteffenDE/nerves_ssh", branch: "cli", override: true},
-      {:nerves_ssh_shell, github: "SteffenDE/nerves_ssh_shell", branch: "main"},
-      # {:nerves_ssh_shell, path: "../../nerves_ssh_shell"},
+      {:nerves_ssh, github: "SteffenDE/nerves_ssh", branch: "unix_shell", override: true},
+      {:erlexec, "~> 2.0"},
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.12.0"},
