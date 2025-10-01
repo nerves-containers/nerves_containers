@@ -1,6 +1,6 @@
-defmodule ContainerManager do
+defmodule NervesContainers do
   @moduledoc """
-  Documentation for `ContainerManager`.
+  Documentation for `NervesContainers`.
   """
 
   @doc """
@@ -8,7 +8,7 @@ defmodule ContainerManager do
 
   ## Examples
 
-      iex> ContainerManager.hello()
+      iex> NervesContainers.hello()
       :world
 
   """

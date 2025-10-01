@@ -1,11 +1,11 @@
-defmodule ContainerLib.MixProject do
+defmodule NervesContainers.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :container_lib,
+      app: :nerves_containers,
       version: "0.1.0",
-      elixir: "~> 1.12",
+      elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -14,17 +14,16 @@ defmodule ContainerLib.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger],
+      mod: {NervesContainers.Application, []}
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
-      {:jason, "~> 1.2"},
-      {:yaml_elixir, "~> 2.8"}
+      {:vintage_net, ">= 0.0.0"},
+      {:muontrap, "~> 1.6"}
     ]
   end
 end
