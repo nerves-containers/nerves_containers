@@ -20,7 +20,7 @@ defmodule Mix.Tasks.NervesContainers.PrebuildCompose do
 
   use Mix.Task
 
-  @shortdoc "Prebuilds an OCI archive for docker with the compose plugin."
+  @shortdoc "Prebuilds a docker archive for docker with the compose plugin."
   def run(args) do
     if !System.find_executable("docker") do
       raise "docker executable is not available on your system!"
@@ -36,16 +36,20 @@ defmodule Mix.Tasks.NervesContainers.PrebuildCompose do
       Keyword.get(opts, :output) ||
         raise "you need to pass the --output parameter (file path) where we'll store the image archive, e.g. priv/compose.tar.gz"
 
-    System.cmd("docker", [
-      "buildx",
-      "build",
-      "--platform",
-      platform,
-      "-t",
-      "docker/compose",
-      "--output",
-      "type=oci,dest=#{output}",
-      Application.app_dir(:nerves_containers, "priv/compose")
-    ])
+    System.cmd(
+      "docker",
+      [
+        "buildx",
+        "build",
+        "--platform",
+        platform,
+        "-t",
+        "docker/compose",
+        "--output",
+        "type=docker,dest=#{output}",
+        Application.app_dir(:nerves_containers, "priv/compose")
+      ],
+      stderr_to_stdout: true
+    )
   end
 end

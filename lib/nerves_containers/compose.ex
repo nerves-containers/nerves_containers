@@ -37,35 +37,45 @@ defmodule NervesContainers.Compose do
   Runs a docker compose command.
 
   Important: Ensure that the `docker/compose` container was built
-  by including `NervesContainers.Compose` in your supervision tree!
+  by including `NervesContainers.Compose` in your supervision tree,
+  or preload it, see `Mix.Tasks.NervesContainers.PrebuildCompose`.
 
-  At the moment, this requires an active internet connection, so
+  Without prebuilding, this requires an active internet connection, so
   also ensure that `:wait_for_internet` config is not set to false.
   """
   def run(command_list, pwd) do
-    if !:persistent_term.get(__MODULE__) do
-      raise ArgumentError,
-            "compose image was not built. Ensure the NervesContainers.Compose module is part of your supervision tree or check the logs!"
-    end
+    with {output, non_zero_exit_code} when non_zero_exit_code != 0 <-
+           NervesContainers.Docker.run(
+             [
+               "run",
+               "--rm",
+               "-e",
+               "HOME=/root",
+               "-w",
+               pwd,
+               "-v",
+               "/root/.balena-engine:/root/.docker",
+               "-v",
+               "/var/run/balena-engine.sock:/var/run/docker.sock",
+               "-v",
+               pwd <> ":" <> pwd,
+               "docker/compose",
+               "compose"
+             ] ++ command_list
+           ) do
+      Logger.error("""
+      Compose command failed with output:
 
-    NervesContainers.Docker.run(
-      [
-        "run",
-        "--rm",
-        "-e",
-        "HOME=/root",
-        "-w",
-        pwd,
-        "-v",
-        "/root/.balena-engine:/root/.docker",
-        "-v",
-        "/var/run/balena-engine.sock:/var/run/docker.sock",
-        "-v",
-        pwd <> ":" <> pwd,
-        "docker/compose",
-        "compose"
-      ] ++ command_list
-    )
+      #{output}
+
+      In case the image does not exist, ensure that either:
+
+        * `NervesContainers.Compose` is part of your supervision tree to automatically build it or
+        * `mix nerves_containers.prebuild_compose` was used and you've loaded the archive on app startup
+      """)
+
+      {output, non_zero_exit_code}
+    end
   end
 
   defp priv_dir(folder) do
