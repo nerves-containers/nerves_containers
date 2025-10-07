@@ -8,11 +8,11 @@ defmodule NervesContainers.Docker do
 
   ## Examples
 
-      iex> NervesContainers.Docker.run("ps")
+      iex> NervesContainers.Docker.run(["ps"])
       {"CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES\n", 0}
 
   """
-  def run(command, opts \\ []) do
-    System.shell("balena-engine #{command}", opts)
+  def run(command_list, opts \\ []) do
+    System.cmd("balena-engine", command_list, opts)
   end
 end

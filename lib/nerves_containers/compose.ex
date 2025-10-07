@@ -48,8 +48,7 @@ defmodule NervesContainers.Compose do
             "compose image was not built. Ensure the NervesContainers.Compose module is part of your supervision tree or check the logs!"
     end
 
-    System.cmd(
-      "balena-engine",
+    NervesContainers.Docker.run(
       [
         "run",
         "--rm",

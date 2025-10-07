@@ -39,6 +39,8 @@ defmodule NervesContainers.MaybeWaitForInternet do
 
         wait_for_internet(1)
       end
+    else
+      :ignore
     end
   end
 
