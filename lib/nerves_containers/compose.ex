@@ -43,7 +43,7 @@ defmodule NervesContainers.Compose do
   Without prebuilding, this requires an active internet connection, so
   also ensure that `:wait_for_internet` config is not set to false.
   """
-  def run(command_list, pwd) do
+  def run(command_list, pwd, opts \\ []) do
     with {output, non_zero_exit_code} when non_zero_exit_code != 0 <-
            NervesContainers.Docker.run(
              [
@@ -61,7 +61,8 @@ defmodule NervesContainers.Compose do
                pwd <> ":" <> pwd,
                "docker/compose",
                "compose"
-             ] ++ command_list
+             ] ++ command_list,
+             opts
            ) do
       Logger.error("""
       Compose command failed with output:
