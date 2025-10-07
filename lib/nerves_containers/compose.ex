@@ -44,26 +44,36 @@ defmodule NervesContainers.Compose do
   also ensure that `:wait_for_internet` config is not set to false.
   """
   def run(command_list, pwd, opts \\ []) do
+    env =
+      case for({key, val} <- Keyword.get(opts, :env), do: "#{key}=#{val}")
+           |> Enum.intersperse("-e") do
+        [] -> []
+        items -> ["-e" | items]
+      end
+
+    args =
+      List.flatten(
+        [
+          "run",
+          "--rm",
+          "-e",
+          "HOME=/root",
+          "-w",
+          pwd,
+          "-v",
+          "/root/.balena-engine:/root/.docker",
+          "-v",
+          "/var/run/balena-engine.sock:/var/run/docker.sock",
+          "-v",
+          pwd <> ":" <> pwd,
+          env,
+          "docker/compose",
+          "compose"
+        ] ++ command_list
+      )
+
     with {output, non_zero_exit_code} when non_zero_exit_code != 0 <-
-           NervesContainers.Docker.run(
-             [
-               "run",
-               "--rm",
-               "-e",
-               "HOME=/root",
-               "-w",
-               pwd,
-               "-v",
-               "/root/.balena-engine:/root/.docker",
-               "-v",
-               "/var/run/balena-engine.sock:/var/run/docker.sock",
-               "-v",
-               pwd <> ":" <> pwd,
-               "docker/compose",
-               "compose"
-             ] ++ command_list,
-             opts
-           ) do
+           NervesContainers.Docker.run(args, opts) do
       Logger.error("""
       Compose command failed with output:
 
