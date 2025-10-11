@@ -45,7 +45,7 @@ defmodule NervesContainers.Compose do
   """
   def run(command_list, pwd, opts \\ []) do
     env =
-      case for({key, val} <- Keyword.get(opts, :env), do: "#{key}=#{val}")
+      case for({key, val} <- Keyword.get(opts, :env, []), do: "#{key}=#{val}")
            |> Enum.intersperse("-e") do
         [] -> []
         items -> ["-e" | items]
